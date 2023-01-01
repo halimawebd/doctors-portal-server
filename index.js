@@ -52,81 +52,81 @@ try{
         next();
         
     }
-    // // Use Aggregate to query multiple collection and then merge data
-    // app.get('/appointmentOptions', async(req, res) => {
-    //     const date = req.query.date;
-    //     const query = {};
-    //     const options = await appointmentOptionCollection.find(query).toArray();
+    // Use Aggregate to query multiple collection and then merge data
+    app.get('/appointmentOptions', async(req, res) => {
+        const date = req.query.date;
+        const query = {};
+        const options = await appointmentOptionCollection.find(query).toArray();
 
-    //     // get the bookings of the provied date
-    //     const bookingQuery = {appoinmentDate: date}
-    //     const alreadyBooked = await bookingsCollection.find(bookingQuery).toArray();
-    //     // code carefully :
-    //     options.forEach(option => {
-    //       const optionBooked = alreadyBooked.filter(book => book.treatment === option.name);
-    //       const bookedSlots = optionBooked.map(book => book.slot);
-    //       const remainingSlots = option.slots.filter(slot => !bookedSlots.includes(slot));
-    //         option.slots = remainingSlots;
+        // get the bookings of the provied date
+        const bookingQuery = {appoinmentDate: date}
+        const alreadyBooked = await bookingsCollection.find(bookingQuery).toArray();
+        // code carefully :
+        options.forEach(option => {
+          const optionBooked = alreadyBooked.filter(book => book.treatment === option.name);
+          const bookedSlots = optionBooked.map(book => book.slot);
+          const remainingSlots = option.slots.filter(slot => !bookedSlots.includes(slot));
+            option.slots = remainingSlots;
   
-    //     })
+        })
 
-    //     res.send(options);
-    // });
+        res.send(options);
+    });
 
-    // app.get('/v2/appointmentionOptions', async(req, res) =>{
-    //     const date = req.query.date;
-    //     const options = await appointmentOptionCollection.aggregate([
-    //         {
-    //             $lookup:
-    //             {
-    //                from: 'bookings',
-    //                localField: 'name',
-    //                foreignField: 'treatment',
-    //                 pipeline: [
-    //                     {
-    //                         $match: {
-    //                            $expr:{
-    //                             $eq: ['$appoinmentDate', date]
-    //                            } 
-    //                         }
-    //                     }
-    //                  ],
-    //                as: 'booked'
-    //             } 
-    //         },
-    //         {
-    //           $project: {
-    //             name: 1,
-    //             price: 1, 
-    //             slots: 1,
-    //             booked: {
-    //                 $map: {
-    //                    input: '$booked',
-    //                    as: 'book', 
-    //                    in: '$$book.slot'
-    //                 }
-    //             }
-    //           }  
-    //         },
-    //         {
-    //             $project: {
-    //                 name: 1,
-    //                 price: 1, 
-    //                 slots: {
-    //                     $setDifference: ['$slots', '$booked']
-    //                 }
-    //             }
-    //         }
-    //     ]).toArray();
-    //     res.send(options);
+    app.get('/v2/appointmentionOptions', async(req, res) =>{
+        const date = req.query.date;
+        const options = await appointmentOptionCollection.aggregate([
+            {
+                $lookup:
+                {
+                   from: 'bookings',
+                   localField: 'name',
+                   foreignField: 'treatment',
+                    pipeline: [
+                        {
+                            $match: {
+                               $expr:{
+                                $eq: ['$appoinmentDate', date]
+                               } 
+                            }
+                        }
+                     ],
+                   as: 'booked'
+                } 
+            },
+            {
+              $project: {
+                name: 1,
+                price: 1, 
+                slots: 1,
+                booked: {
+                    $map: {
+                       input: '$booked',
+                       as: 'book', 
+                       in: '$$book.slot'
+                    }
+                }
+              }  
+            },
+            {
+                $project: {
+                    name: 1,
+                    price: 1, 
+                    slots: {
+                        $setDifference: ['$slots', '$booked']
+                    }
+                }
+            }
+        ]).toArray();
+        res.send(options);
    
-    // })
+    })
 
-    // app.get('/appointmentSpecialty', async(req, res) =>{
-    //     const query = {}
-    //     const result = await appointmentOptionCollection.find(query).project({name: 1}).toArray();
-    //     res.send(result);
-    // })
+    app.get('/appointmentSpecialty', async(req, res) =>{
+        const query = {}
+        const result = await appointmentOptionCollection.find(query).project({name: 1}).toArray();
+        res.send(result);
+    })
     /**
      * API Naming Convention 
      * app.get('/bookings)
