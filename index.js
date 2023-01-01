@@ -226,18 +226,18 @@ try{
         res.send(result);
     });
 
-    // app.put('/users/admin/:id', veryfyJWT, veryfyAdmin, async(req, res) =>{
-    //     const id = req.params.id;
-    //     const filter = { _id: ObjectId(id) }
-    //     const options = { upsert: true};
-    //     const updatedDoc = {
-    //         $set : {
-    //            role: 'admin' 
-    //         }
-    //     }
-    //     const result = await usersCollection.updatedOne(filter, updatedDoc, options)
-    //     res.send(result);
-    // });
+    app.put('/users/admin/:id', veryfyJWT, veryfyAdmin, async(req, res) =>{
+        const id = req.params.id;
+        const filter = { _id: ObjectId(id) }
+        const options = { upsert: true};
+        const updatedDoc = {
+            $set : {
+               role: 'admin' 
+            }
+        }
+        const result = await usersCollection.updatedOne(filter, updatedDoc, options)
+        res.send(result);
+    });
 
     // temporary to update price field on appointment options
     // app.get('/addPrice', async(req, res) =>{
@@ -252,33 +252,33 @@ try{
     //     res.send(result);
     // })
 
-//     app.get('/doctors', async(req, res) =>{
-//         const query = {};
-//         const doctors = await doctorsCollection.find(query).toArray();
-//         res.send(doctors);
-//     })
+    app.get('/doctors', async(req, res) =>{
+        const query = {};
+        const doctors = await doctorsCollection.find(query).toArray();
+        res.send(doctors);
+    })
 
-//     app.post('/doctors', veryfyJWT, veryfyAdmin, async(req, res) =>{
-//         const doctor = req.body;
-//         const result = await doctorsCollection.insertOne(doctor);
-//         res.send(result);
-//     });
+    app.post('/doctors', veryfyJWT, veryfyAdmin, async(req, res) =>{
+        const doctor = req.body;
+        const result = await doctorsCollection.insertOne(doctor);
+        res.send(result);
+    });
 
-//     app.delete('/doctors/:id', veryfyJWT, veryfyAdmin, async(req, res) => {
-//         const id = req.params.id;
-//         const filter = {_id: ObjectId(id) };
-//         const result = await doctorsCollection.deleteOne(filter);
-//         res.send(result);
-//     })
-// }
-// finally{
+    app.delete('/doctors/:id', veryfyJWT, veryfyAdmin, async(req, res) => {
+        const id = req.params.id;
+        const filter = {_id: ObjectId(id) };
+        const result = await doctorsCollection.deleteOne(filter);
+        res.send(result);
+    })
+}
+finally{
 
-// }
-// }
-// run().catch(console.log);
+}
+}
+run().catch(console.log);
 
-// app.get('/', async(req, res) =>{
-// res.send('doctors portal server is running');
-// })
+app.get('/', async(req, res) =>{
+res.send('doctors portal server is running');
+})
 
-// app.listen(port, () => console.log(`Doctors portal running on ${port}`))
+app.listen(port, () => console.log(`Doctors portal running on ${port}`))
