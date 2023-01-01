@@ -193,23 +193,23 @@ try{
         });
     })
 
-    // app.get('/jwt', async(req, res) =>{
-    //     const email = req.query.email;
-    //     const query = {email: email};
-    //     const user = await usersCollection.findOne(query);
-    //     console.log(process.env.ACCESS_TOKEN, email, user)
-    //     if(user){
-    //        const token = jwt.sign({email}, process.env.ACCESS_TOKEN, {expiresIn: '7d'})
-    //        console.log(token);
-    //        return res.send({accessToken: token});
-    //     }
-    //    res.send(403).send({accessToken: ''})
-    // });
+    app.get('/jwt', async(req, res) =>{
+        const email = req.query.email;
+        const query = {email: email};
+        const user = await usersCollection.findOne(query);
+        console.log(process.env.ACCESS_TOKEN, email, user)
+        if(user){
+           const token = jwt.sign({email}, process.env.ACCESS_TOKEN, {expiresIn: '7d'})
+           console.log(token);
+           return res.send({accessToken: token});
+        }
+       res.send(403).send({accessToken: ''})
+    });
 
-    // app.get('/users', async(req, res) =>{
-    //     const users = await usersCollection.find({}).toArray();
-    //     res.send(users);
-    // });
+    app.get('/users', async(req, res) =>{
+        const users = await usersCollection.find({}).toArray();
+        res.send(users);
+    });
 
     // app.get('/users/admin/:email', async (req, res) => {
     //     const email = req.params.email;
