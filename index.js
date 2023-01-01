@@ -136,62 +136,62 @@ try{
      * app.delete('/bookings/:id)
      */
 
-    // app.get('/bookings', veryfyJWT, async(req, res) =>{
-    //     const email = req.query.email;
+    app.get('/bookings', veryfyJWT, async(req, res) =>{
+        const email = req.query.email;
 
-    //     const decodedEmail = req.decoded.email;
-    //     console.log(email, decodedEmail);
+        const decodedEmail = req.decoded.email;
+        console.log(email, decodedEmail);
 
-    //     if(email !== decodedEmail){
-    //         return res.status(403).send({message: 'forbidden access'});
-    //     }
-    //     const query = { email: email };
-    //     const bookings = await bookingsCollection.find(query).toArray();
-    //     res.send(bookings);
-    // });
+        if(email !== decodedEmail){
+            return res.status(403).send({message: 'forbidden access'});
+        }
+        const query = { email: email };
+        const bookings = await bookingsCollection.find(query).toArray();
+        res.send(bookings);
+    });
 
-    // app.get('/bookings/:id', async (req, res) => {
-    //     const id = req.params.id;
-    //     const query = { _id: ObjectId(id) };
-    //     const booking = await bookingsCollection.findOne(query);
-    //     res.send(booking);
-    // })
+    app.get('/bookings/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const booking = await bookingsCollection.findOne(query);
+        res.send(booking);
+    })
 
-    // app.post('/bookings', async(req, res) =>{
-    //     const booking = req.body;
-    //     console.log(booking);
-    //     const query = {
-    //         appointmentDate: booking.appointmentDate,
-    //         email: booking.email,
-    //     }
+    app.post('/bookings', async(req, res) =>{
+        const booking = req.body;
+        console.log(booking);
+        const query = {
+            appointmentDate: booking.appointmentDate,
+            email: booking.email,
+        }
 
-    //     const alreadyBooked = await bookingsCollection.find(query).toArray();
+        const alreadyBooked = await bookingsCollection.find(query).toArray();
 
-    //     if (alreadyBooked.length){
-    //         const message = `You already have a booking on ${booking.appoinmentDate}`
-    //         return res.send({acknowledged: false, message})
-    //     }
-    //     const result = await bookingsCollection.insertOne(booking);
-    //     res.send(result);
-    // });
+        if (alreadyBooked.length){
+            const message = `You already have a booking on ${booking.appoinmentDate}`
+            return res.send({acknowledged: false, message})
+        }
+        const result = await bookingsCollection.insertOne(booking);
+        res.send(result);
+    });
 
-    // app.post('/create-payment-intent', async (req, res) =>{
-    //     const bookings = req.body;
-    //     const price = bookings.price;
-    //     const amount = price * 100;
+    app.post('/create-payment-intent', async (req, res) =>{
+        const bookings = req.body;
+        const price = bookings.price;
+        const amount = price * 100;
 
-    //     const paymentIntent = await stripe.paymentIntents.create({
-    //         currency: 'usd',
-    //         amount: amount,
-    //         "payment_method_types": [
-    //             "card"
-    //         ]
-    //     });
-    //     res.send({
-    //         clientSecret: paymentIntent.client_secret,
+        const paymentIntent = await stripe.paymentIntents.create({
+            currency: 'usd',
+            amount: amount,
+            "payment_method_types": [
+                "card"
+            ]
+        });
+        res.send({
+            clientSecret: paymentIntent.client_secret,
 
-    //     });
-    // })
+        });
+    })
 
     // app.get('/jwt', async(req, res) =>{
     //     const email = req.query.email;
